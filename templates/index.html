@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 LifeSaver AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="box">
+
+        <h1>🚀 LifeSaver AI</h1>
+        <h3>Your Smart Productivity Assistant</h3>
+
+        <!-- Search -->
+
+        <form method="GET" action="/">
+            <div class="search-box">
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="🔍 Search Task..."
+                    value="{{ search }}"
+                >
+
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        <!-- Dashboard -->
+
+        <div class="dashboard">
+
+            <div class="card blue">
+                <div id="total">{{ total_tasks }}</div>
+                <small>Total Tasks</small>
+            </div>
+
+            <div class="card green">
+                <div id="completed">{{ completed_tasks }}</div>
+                <small>Completed</small>
+            </div>
+
+            <div class="card orange">
+                <div>{{ pending_tasks }}</div>
+                <small>Pending</small>
+            </div>
+
+        </div>
+
+
+        <!-- Progress Bar -->
+
+<h3>📈 Progress: {{ progress }}%</h3>
+
+<div class="progress">
+    <div class="progress-bar" id="progress"></div>
+</div>
+        <!-- Add Task -->
+
+        <h2>Add New Task</h2>
+
+        <form method="POST" action="/">
+
+            <input
+                type="text"
+                name="task"
+                placeholder="Enter your task"
+                required
+            >
+
+            <input
+                type="date"
+                name="date"
+                required
+            >
+
+            <select name="priority">
+
+                <option>High Priority</option>
+                <option>Medium Priority</option>
+                <option>Low Priority</option>
+
+            </select>
+
+            <button type="submit">
+                ➕ Add Task
+            </button>
+
+        </form>
+
+        <hr>
+
+        <h2>Today's Tasks</h2>
+
+        {% if tasks %}
+
+            {% for task in tasks %}
+
+            <div class="task
+                {% if task[3]=='High Priority' %}
+                    high
+                {% elif task[3]=='Medium Priority' %}
+                    medium
+                {% else %}
+                    low
+                {% endif %}
+            ">
+
+                {% if task[4] == 1 %}
+
+                    <h3>
+                        ✅
+                        <del>{{ task[1] }}</del>
+                    </h3>
+
+                {% else %}
+
+                    <h3>{{ task[1] }}</h3>
+
+                {% endif %}
+
+                <p>📅 <b>Date:</b> {{ task[2] }}</p>
+
+                <p>🚩 <b>Priority:</b> {{ task[3] }}</p>
+
+                <div class="actions">
+
+                    {% if task[4] == 0 %}
+                    <a href="/complete/{{ task[0] }}">
+                        <button>
+                            ✔️ Complete
+                        </button>
+                    </a>
+                    {% endif %}
+
+                    <a href="/delete/{{ task[0] }}">
+                        <button>
+                            🗑️ Delete
+                        </button>
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <h3>No tasks found.</h3>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
